@@ -12,7 +12,7 @@
 
 pkgname=mesa-git
 pkgdesc="an open-source implementation of the OpenGL specification, git version"
-pkgver=22.0.0_devel.147902.c50bdacbda6.d41d8cd98f00b204e9800998ecf8427e
+pkgver=22.0.0_devel.148086.9c81de7df29.1f9522c6f411189d4d37f93ecc03e612
 pkgrel=1
 arch=('x86_64')
 makedepends=('git' 'python-mako' 'xorgproto'
@@ -26,7 +26,7 @@ conflicts=('mesa' 'opencl-mesa' 'vulkan-intel' 'vulkan-radeon' 'vulkan-mesa-laye
 url="https://www.mesa3d.org"
 license=('custom')
 source=('mesa::git+https://gitlab.freedesktop.org/mesa/mesa.git#branch=main'
-        'LICENSE')
+        'LICENSE' 'hd4000.patch')
 md5sums=('SKIP'
          '5c65a0fe315dd347e09b1f2826a1df5a')
 sha512sums=('SKIP'
@@ -168,3 +168,9 @@ package() {
   
     install -m644 -Dt "${pkgdir}/usr/share/licenses/${pkgname}" "${srcdir}/LICENSE"
 }
+md5sums=('SKIP'
+         '5c65a0fe315dd347e09b1f2826a1df5a'
+         'fe39f2e80d24267bf913e2d2c33ef27b')
+sha512sums=('SKIP'
+            '25da77914dded10c1f432ebcbf29941124138824ceecaf1367b3deedafaecabc082d463abcfa3d15abff59f177491472b505bcb5ba0c4a51bb6b93b4721a23c2'
+            '8a0936cef3da0684ed27bec976be0821953249c463f76c4810cb28f33fbf306421fc60683a14ea8ad79b546d3a70eecb49e98e5d5f58a3164cb790bb27492aed')

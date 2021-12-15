@@ -1,0 +1,32 @@
+From 76ac3a58c2780db8cec43323992f61a51a15f3f0 Mon Sep 17 00:00:00 2001
+From: Adam Jackson <ajax@redhat.com>
+Date: Wed, 21 Jul 2021 12:02:35 -0400
+Subject: [PATCH] glx: Try a different trick to fix request sequence numbers
+
+The xcb we just did only updated xcb's view of the request number but
+later on we're going to pull that number from xlib's view. XFlush is
+just enough touch to make xlib retake the socket and sync its state with
+xcb.
+---
+ src/glx/create_context.c | 5 ++---
+ 1 file changed, 2 insertions(+), 3 deletions(-)
+
+diff --git a/src/glx/create_context.c b/src/glx/create_context.c
+index 7e1cec98c64..80f2aecad22 100644
+--- a/src/glx/create_context.c
++++ b/src/glx/create_context.c
+@@ -146,9 +146,8 @@ glXCreateContextAttribsARB(Display *dpy, GLXFBConfig config,
+        * somehow on the client side. clean up the server resource and panic.
+        */
+       xcb_glx_destroy_context(c, xid);
+-      /* increment dpy->request in order to give a unique serial number to the
+-       * error */
+-      XNoOp(dpy);
++      /* Bounce the socket back into xlib to sync dpy->request with xcb */
++      XFlush(dpy);
+       __glXSendError(dpy, GLXBadFBConfig, xid, 0, False);
+    } else {
+       gc->xid = xid;
+-- 
+2.30.1
+
